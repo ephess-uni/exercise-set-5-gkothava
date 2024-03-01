@@ -7,7 +7,7 @@ This module contains an entry point that
 - writes the processed data to a file called `ex_5_2-processed.csv`
 """
 import numpy as np
-
+import os
 try:
     from src.util import get_repository_root
 except ImportError:
@@ -20,7 +20,11 @@ if __name__ == "__main__":
     root_dir = get_repository_root()
     INFILE = root_dir / "data" / "ex_5_2-data.csv"
     OUTFILE = root_dir / "outputs" / "ex_5_2-processed.csv"
-
-    # Complete the data processing steps using numpy here.
-
-    # Save the output to OUTFILE using numpy routines.
+    
+    os.makedirs(root_dir / "outputs", exist_ok=True)
+    fldata = np.loadtxt(INFILE)
+    mean_ = np.mean(fldata)
+    zero_mean = fldata - mean_
+    std1 = np.std(zero_mean)
+    processed = zero_mean / std1
+    np.savetxt(OUTFILE, processed,fmt='%.2e')
